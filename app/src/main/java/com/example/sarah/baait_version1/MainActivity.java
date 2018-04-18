@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
-
+    //public BtSerial btSerial = new BtSerial(this.getApplicationContext());
     /**
      * The {@link ViewPager} that will host the section contents.
      */

@@ -28,7 +28,7 @@ public class TabOne extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     View view=inflater.inflate(R.layout.tab_one,container,false);
-    TextView temp = (TextView) view.findViewById(R.id.textView4);
+    temp = (TextView) view.findViewById(R.id.textView4);
     ToggleButton toggle = (ToggleButton) view.findViewById(R.id.toggleButton);
    // blue = new BtSerial(this.getContext());
     toggle.setOnClickListener(new View.OnClickListener(){
@@ -36,8 +36,11 @@ public class TabOne extends Fragment
         public void onClick(View v){
             if(CvF == false){
                 CvF = true;
+                temp.setText("Fahrenheit");
             }
-            else{CvF = false;}
+            else{CvF = false;
+                temp.setText("Celsius");}
+
         }
         });
     return view;}
