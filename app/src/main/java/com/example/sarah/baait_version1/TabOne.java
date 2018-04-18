@@ -40,7 +40,6 @@ public class TabOne extends Fragment
             }
             else{CvF = false;
                 temp.setText("Celsius");}
-
         }
         });
     return view;}

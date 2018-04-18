@@ -19,21 +19,27 @@ public class TabTwo extends Fragment
 
 
 {
+    public LineGraphSeries<DataPoint> series = null;
+    int maxlength = 10;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.tab_two, container, false);
         GraphView graph = (GraphView) view.findViewById(R.id.graph);
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new
-                DataPoint[]{
-                new DataPoint(0, 98.6),
-                new DataPoint(1, 99),
-                new DataPoint(2, 99),
-                new DataPoint(3, 99.2),
-                new DataPoint(4, 99.3)
-        });
+        series = new LineGraphSeries<DataPoint>();
+        series.appendData(new DataPoint(0, 98.6),true,maxlength);
+        series.appendData(new DataPoint(1,98.1), true, maxlength);
         graph.addSeries(series);
         return view;
     }
+
+
+
+    public boolean addToGraph(int x, int y){
+        series.appendData(new DataPoint(x,y),true, maxlength);
+        return true;
+    }
+
+
 }
