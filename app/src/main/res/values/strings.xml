@@ -15,6 +15,14 @@
     <string name="fahrenheit">Fahrenheit</string>
     <string name="celsius">Celsius</string>
     <string name="settings">Settings:</string>
-    <string name="connect_phone_to_patch_via_bluetooth_attach_patch_to_child_s_armpit">Connect phone to patch via Bluetooth. Attach patch to child\'s armpit.</string>
+    <string name="turn_on_patch_and_attach_to_child_s_armpit_connect_with_patch_via_bluetooth_in_the_settings_application_of_your_device_temperature_readings_will_be_displayed_in_the_quot_numerical_view_quot_tab_of_the_application_visit_the_baait_isntruction_manual_for_troubleshooting_instructions">Turn on patch and attach to child\'s armpit. Connect with patch via Bluetooth in the settings application of your device. Temperature readings will be displayed in the \"Numerical View\" tab of the application. Visit the BAAIT isntruction manual for troubleshooting instructions.</string>
+    <string name="add_a_new_patch">Add a New Patch</string>
+    <string name="set_up_multiple_patches_to_monitor_multiple_children">Set up multiple patches to monitor multiple children:</string>
+    <string name="_99_3">99.3</string>
+    <string name="togglebutton">ToggleButton</string>
+    <string name="export_data_to_csv_file">Export data to .csv file:</string>
+    <string name="enter_email_address">Enter email address:</string>
+    <string name="email_email_com">email@email.com</string>
+    <string name="send_csv">Send .csv</string>
 
 </resources>
