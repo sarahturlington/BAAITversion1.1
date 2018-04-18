@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">BAAIT - version 1</string>
+    <string name="tab_text_1">Numerical View</string>
+    <string name="tab_text_2">Graph View</string>
+    <string name="tab_text_3">Instructions</string>
+    <string name="tab_text_4">Settings</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="write_usage_instructions_here">Write usage instructions here</string>
+    <string name="current_temperature">Current Temperature:</string>
+    <string name="instructions">Instructions:</string>
+    <string name="write_instructions_here">Write Instructions Here</string>
+    <string name="_99_3_f">99.3 F</string>
+    <string name="temperature_units">Temperature Units</string>
+    <string name="fahrenheit">Fahrenheit</string>
+    <string name="celsius">Celsius</string>
+    <string name="settings">Settings:</string>
+    <string name="connect_phone_to_patch_via_bluetooth_attach_patch_to_child_s_armpit">Connect phone to patch via Bluetooth. Attach patch to child\'s armpit.</string>
+
+</resources>
