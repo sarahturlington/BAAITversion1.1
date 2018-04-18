@@ -6,7 +6,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.ToggleButton;
+
 
 
 /**
@@ -16,20 +18,29 @@ import android.widget.ToggleButton;
 public class TabOne extends Fragment
 
 {
-    public ToggleButton toggleButton;
+   // public BtSerial blue = null;
+    public ToggleButton toggleButton = null;
     public double Temperature;
+    public TextView temp = null;
+    public boolean CvF = false;
 
     @Nullable
     @Override
-
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     View view=inflater.inflate(R.layout.tab_one,container,false);
-    Temperature=99.3;
-
-
-
+    TextView temp = (TextView) view.findViewById(R.id.textView4);
+    ToggleButton toggle = (ToggleButton) view.findViewById(R.id.toggleButton);
+   // blue = new BtSerial(this.getContext());
+    toggle.setOnClickListener(new View.OnClickListener(){
+        @Override
+        public void onClick(View v){
+            if(CvF == false){
+                CvF = true;
+            }
+            else{CvF = false;}
+        }
+        });
     return view;}
 
-
-
 }
+
