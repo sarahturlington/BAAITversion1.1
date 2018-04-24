@@ -22,7 +22,7 @@ public class TabOne extends Fragment
    // public BtSerial blue = null;
     public ToggleButton toggleButton = null;
     public double Temperature;
-    public TextView temp = null;
+    public static TextView temp = null;
     public boolean CvF = false;
 
     @Nullable
@@ -44,6 +44,10 @@ public class TabOne extends Fragment
         }
         });
     return view;}
+
+    public static void sText(double data){
+        temp.setText(Double.toString(data));
+    }
 
 }
 
