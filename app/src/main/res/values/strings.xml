@@ -24,5 +24,6 @@
     <string name="enter_email_address">Enter email address:</string>
     <string name="email_email_com">email@email.com</string>
     <string name="send_csv">Send .csv</string>
+    <string name="example_example_com">example@example.com</string>
 
 </resources>
