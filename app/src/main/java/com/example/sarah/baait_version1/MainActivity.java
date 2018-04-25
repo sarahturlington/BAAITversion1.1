@@ -67,7 +67,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        View _mw = getLayoutInflater().inflate(R.layout.activity_main, null);
+        setContentView(_mw);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
@@ -190,82 +191,84 @@ public class MainActivity extends AppCompatActivity {
         }
 
 }
-    void findBT()
+
+
+    voidfindBT()
     {
-        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if(mBluetoothAdapter == null)
+        mBluetoothAdapter=BluetoothAdapter.getDefaultAdapter();
+        if(mBluetoothAdapter==null)
         {
-            TabOne.sText(100);//show if no adapter
+            TabOne.sText(100);//showifnoadapter
         }
 
         if(!mBluetoothAdapter.isEnabled())
         {
-            Intent enableBluetooth = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableBluetooth, 0);
+            IntentenableBluetooth=newIntent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBluetooth,0);
         }
 
-        Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
-        if(pairedDevices.size() > 0)
+        Set<BluetoothDevice>pairedDevices=mBluetoothAdapter.getBondedDevices();
+        if(pairedDevices.size()>0)
         {
-            for(BluetoothDevice device : pairedDevices)
+            for(BluetoothDevicedevice:pairedDevices)
             {
                 if(device.getName().equals("HC-06"))
                 {
-                    mmDevice = device;
+                    mmDevice=device;
                     break;
                 }
             }
         }
-        TabOne.sText(99);//"Bluetooth Device Found"
+        TabOne.sText(99);//"BluetoothDeviceFound"
     }
 
-    void openBT() throws IOException
+    voidopenBT()throwsIOException
     {
-        UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"); //Standard SerialPortService ID
-        mmSocket = mmDevice.createRfcommSocketToServiceRecord(uuid);
+        UUIDuuid=UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");//StandardSerialPortServiceID
+        mmSocket=mmDevice.createRfcommSocketToServiceRecord(uuid);
         mmSocket.connect();
-        mmOutputStream = mmSocket.getOutputStream();
-        mmInputStream = mmSocket.getInputStream();
+        mmOutputStream=mmSocket.getOutputStream();
+        mmInputStream=mmSocket.getInputStream();
 
         beginListenForData();
 
-        //myLabel.setText("Bluetooth Opened");
+        //myLabel.setText("BluetoothOpened");
     }
 
-    void beginListenForData()
+    voidbeginListenForData()
     {
-        final Handler handler = new Handler();
-        final byte delimiter = 10; //This is the ASCII code for a newline character
+        finalHandlerhandler=newHandler();
+        finalbytedelimiter=10;//ThisistheASCIIcodeforanewlinecharacter
 
-        stopWorker = false;
-        readBufferPosition = 0;
-        readBuffer = new byte[1024];
-        workerThread = new Thread(new Runnable()
+        stopWorker=false;
+        readBufferPosition=0;
+        readBuffer=newbyte[1024];
+        workerThread=newThread(newRunnable()
         {
-            public void run()
+            publicvoidrun()
             {
-                while(!Thread.currentThread().isInterrupted() && !stopWorker)
+                while(!Thread.currentThread().isInterrupted()&&!stopWorker)
                 {
                     try
                     {
-                        int bytesAvailable = mmInputStream.available();
-                        if(bytesAvailable > 0)
+                        intbytesAvailable=mmInputStream.available();
+                        if(bytesAvailable>0)
                         {
-                            byte[] packetBytes = new byte[bytesAvailable];
+                            byte[]packetBytes=newbyte[bytesAvailable];
                             mmInputStream.read(packetBytes);
-                            for(int i=0;i<bytesAvailable;i++)
+                            for(inti=0;i<bytesAvailable;i++)
                             {
-                                byte b = packetBytes[i];
-                                if(b == delimiter)
+                                byteb=packetBytes[i];
+                                if(b==delimiter)
                                 {
-                                    byte[] encodedBytes = new byte[readBufferPosition];
-                                    System.arraycopy(readBuffer, 0, encodedBytes, 0, encodedBytes.length);
-                                    final String data = new String(encodedBytes, "US-ASCII");
-                                    readBufferPosition = 0;
+                                    byte[]encodedBytes=newbyte[readBufferPosition];
+                                    System.arraycopy(readBuffer,0,encodedBytes,0,encodedBytes.length);
+                                    finalStringdata=newString(encodedBytes,"US-ASCII");
+                                    readBufferPosition=0;
 
-                                    handler.post(new Runnable()
+                                    handler.post(newRunnable()
                                     {
-                                        public void run()
+                                        publicvoidrun()
                                         {
                                             TabOne.sText(Double.parseDouble(data));
                                         }
@@ -273,14 +276,14 @@ public class MainActivity extends AppCompatActivity {
                                 }
                                 else
                                 {
-                                    readBuffer[readBufferPosition++] = b;
+                                    readBuffer[readBufferPosition++]=b;
                                 }
                             }
                         }
                     }
-                    catch (IOException ex)
+                    catch(IOExceptionex)
                     {
-                        stopWorker = true;
+                        stopWorker=true;
                     }
                 }
             }
@@ -289,20 +292,21 @@ public class MainActivity extends AppCompatActivity {
         workerThread.start();
     }
 
-    void sendData() throws IOException
+    voidsendData()throwsIOException
     {
-        String msg =null; //myTextbox.getText().toString();
-        msg += "\n";
+        Stringmsg=null;//myTextbox.getText().toString();
+        msg+="\n";
         mmOutputStream.write(msg.getBytes());
         TabOne.sText(101);
     }
 
-    void closeBT() throws IOException
+    voidcloseBT()throwsIOException
     {
-        stopWorker = true;
+        stopWorker=true;
         mmOutputStream.close();
         mmInputStream.close();
         mmSocket.close();
-        TabOne.sText(102);//closed succesfully
+        TabOne.sText(102);//closedsuccesfully
     }
+
 }
