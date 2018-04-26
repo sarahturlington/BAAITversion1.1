@@ -1,5 +1,5 @@
 package com.example.sarah.baait_version1;
-
+import android.app.Activity;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -193,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
 }
 
 
-    voidfindBT()
+    void findBT()
     {
         mBluetoothAdapter=BluetoothAdapter.getDefaultAdapter();
         if(mBluetoothAdapter==null)
@@ -203,14 +203,14 @@ public class MainActivity extends AppCompatActivity {
 
         if(!mBluetoothAdapter.isEnabled())
         {
-            IntentenableBluetooth=newIntent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            Intent enableBluetooth=new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBluetooth,0);
         }
 
-        Set<BluetoothDevice>pairedDevices=mBluetoothAdapter.getBondedDevices();
+        Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
         if(pairedDevices.size()>0)
         {
-            for(BluetoothDevicedevice:pairedDevices)
+            for(BluetoothDevice device:pairedDevices)
             {
                 if(device.getName().equals("HC-06"))
                 {
@@ -222,9 +222,9 @@ public class MainActivity extends AppCompatActivity {
         TabOne.sText(99);//"BluetoothDeviceFound"
     }
 
-    voidopenBT()throwsIOException
+    void openBT()throws IOException
     {
-        UUIDuuid=UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");//StandardSerialPortServiceID
+        UUID uuid=UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");//StandardSerialPortServiceID
         mmSocket=mmDevice.createRfcommSocketToServiceRecord(uuid);
         mmSocket.connect();
         mmOutputStream=mmSocket.getOutputStream();
@@ -235,40 +235,40 @@ public class MainActivity extends AppCompatActivity {
         //myLabel.setText("BluetoothOpened");
     }
 
-    voidbeginListenForData()
+    void beginListenForData()
     {
-        finalHandlerhandler=newHandler();
-        finalbytedelimiter=10;//ThisistheASCIIcodeforanewlinecharacter
+        final Handler handler= new Handler();
+        final byte delimiter=10;//ThisistheASCIIcodeforanewlinecharacter
 
         stopWorker=false;
         readBufferPosition=0;
-        readBuffer=newbyte[1024];
-        workerThread=newThread(newRunnable()
+        readBuffer=new byte[1024];
+        workerThread=new Thread(new Runnable()
         {
-            publicvoidrun()
+            public void run()
             {
                 while(!Thread.currentThread().isInterrupted()&&!stopWorker)
                 {
                     try
                     {
-                        intbytesAvailable=mmInputStream.available();
+                        int bytesAvailable=mmInputStream.available();
                         if(bytesAvailable>0)
                         {
-                            byte[]packetBytes=newbyte[bytesAvailable];
+                            byte[]packetBytes=new byte[bytesAvailable];
                             mmInputStream.read(packetBytes);
-                            for(inti=0;i<bytesAvailable;i++)
+                            for(int i=0;i<bytesAvailable;i++)
                             {
-                                byteb=packetBytes[i];
+                                byte b=packetBytes[i];
                                 if(b==delimiter)
                                 {
-                                    byte[]encodedBytes=newbyte[readBufferPosition];
+                                    byte[]encodedBytes=new byte[readBufferPosition];
                                     System.arraycopy(readBuffer,0,encodedBytes,0,encodedBytes.length);
-                                    finalStringdata=newString(encodedBytes,"US-ASCII");
+                                    final String data=new String(encodedBytes,"US-ASCII");
                                     readBufferPosition=0;
 
-                                    handler.post(newRunnable()
+                                    handler.post(new Runnable()
                                     {
-                                        publicvoidrun()
+                                        public void run()
                                         {
                                             TabOne.sText(Double.parseDouble(data));
                                         }
@@ -281,7 +281,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                     }
-                    catch(IOExceptionex)
+                    catch(IOException ex)
                     {
                         stopWorker=true;
                     }
@@ -292,15 +292,15 @@ public class MainActivity extends AppCompatActivity {
         workerThread.start();
     }
 
-    voidsendData()throwsIOException
+    void sendData()throws IOException
     {
-        Stringmsg=null;//myTextbox.getText().toString();
+        String msg=null;//myTextbox.getText().toString();
         msg+="\n";
         mmOutputStream.write(msg.getBytes());
         TabOne.sText(101);
     }
 
-    voidcloseBT()throwsIOException
+    void closeBT()throws IOException
     {
         stopWorker=true;
         mmOutputStream.close();
