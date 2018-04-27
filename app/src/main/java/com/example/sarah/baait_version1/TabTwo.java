@@ -20,7 +20,8 @@ public class TabTwo extends Fragment
 
 {
     public LineGraphSeries<DataPoint> series = null;
-    int maxlength = 10;
+    int maxlength = 30;
+    long x_value = 0;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -34,7 +35,7 @@ public class TabTwo extends Fragment
         return view;
     }
 
-
+    
 
     public boolean addToGraph(int x, int y){
         series.appendData(new DataPoint(x,y),true, maxlength);

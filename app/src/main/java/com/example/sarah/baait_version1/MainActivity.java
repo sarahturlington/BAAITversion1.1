@@ -74,7 +74,9 @@ public class MainActivity extends AppCompatActivity {
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-
+        try{openBT();}
+        catch(Exception e){
+        }
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
@@ -198,7 +200,7 @@ public class MainActivity extends AppCompatActivity {
         mBluetoothAdapter=BluetoothAdapter.getDefaultAdapter();
         if(mBluetoothAdapter==null)
         {
-            TabOne.sText(100);//showifnoadapter
+          //  TabOne.sText(100);//showifnoadapter
         }
 
         if(!mBluetoothAdapter.isEnabled())
@@ -219,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
-        TabOne.sText(99);//"BluetoothDeviceFound"
+        //.sText(99);//"BluetoothDeviceFound"
     }
 
     void openBT()throws IOException
@@ -270,7 +272,7 @@ public class MainActivity extends AppCompatActivity {
                                     {
                                         public void run()
                                         {
-                                            TabOne.sText(Double.parseDouble(data));
+                                           // TabOne.sText(Double.parseDouble(data));
                                         }
                                     });
                                 }
@@ -297,7 +299,7 @@ public class MainActivity extends AppCompatActivity {
         String msg=null;//myTextbox.getText().toString();
         msg+="\n";
         mmOutputStream.write(msg.getBytes());
-        TabOne.sText(101);
+      //  TabOne.sText(101);
     }
 
     void closeBT()throws IOException
@@ -306,7 +308,7 @@ public class MainActivity extends AppCompatActivity {
         mmOutputStream.close();
         mmInputStream.close();
         mmSocket.close();
-        TabOne.sText(102);//closedsuccesfully
+        //TabOne.sText(102);//closedsuccesfully
     }
 
 }
