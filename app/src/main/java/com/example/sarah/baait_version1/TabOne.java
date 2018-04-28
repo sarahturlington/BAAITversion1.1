@@ -1,11 +1,16 @@
 package com.example.sarah.baait_version1;
         import android.app.Activity;
+        import android.app.AlertDialog;
         import android.bluetooth.BluetoothAdapter;
         import android.bluetooth.BluetoothDevice;
         import android.bluetooth.BluetoothSocket;
+        import android.content.DialogInterface;
         import android.content.Intent;
         import android.os.Bundle;
         import android.os.Handler;
+        import android.text.Editable;
+        import android.text.TextWatcher;
+        import android.view.Gravity;
         import android.view.View;
         import android.widget.CompoundButton;
         import android.widget.TextView;
@@ -23,6 +28,8 @@ package com.example.sarah.baait_version1;
         import android.view.View;
         import android.view.ViewGroup;
         import android.widget.ToggleButton;
+
+        import org.w3c.dom.Text;
 
 
 /**
@@ -46,8 +53,11 @@ public class TabOne extends Fragment
     int counter;
     volatile boolean stopWorker;
     ToggleButton celsiusButton;
-    boolean isCelsius = false;
-
+    boolean isCelsius = true;
+    TextView CvF;
+    double thresh = 30;//in// celcius
+    boolean ignore = false;
+    TextView errors;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState){
@@ -55,14 +65,61 @@ public class TabOne extends Fragment
         View view = inflater.inflate(R.layout.tab_one, container, false);
         Button openButton = (Button)view.findViewById(R.id.open);
         Button closeButton = (Button)view.findViewById(R.id.close);
+        final TextView CvF = (TextView) view.findViewById(R.id.textView2);
         myLabel = (TextView)view.findViewById(R.id.label);
+        errors = (TextView) view.findViewById(R.id.textView9);
+        myLabel.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            double current = 0;
+                try{
+                current = Double.parseDouble(charSequence.toString());
+            }catch(Exception e){
+                    current = -99;
+                }
+            if((current >= thresh) && (!ignore)){
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setCancelable(true);
+                builder.setMessage("Temperature Exceeded: " + Double.toString(thresh));
+                builder.setTitle("Check Your Baby!");
+                ignore = true;
+                builder.setNegativeButton("Let Him/Her Die", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                        ignore = false;
+                    }
+                });
+                builder.setPositiveButton("Im Going!", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                       ignore = true;
+
+                    }
+                });
+                builder.show();
+            }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
+        myLabel.setGravity(Gravity.CENTER);
         ToggleButton celsiusButton = (ToggleButton) view.findViewById(R.id.celsius);
         celsiusButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     isCelsius = false;
+                    CvF.setText("F");
                 } else {
                     isCelsius = true;
+                    CvF.setText("C");
                 }
             }
         });
@@ -101,7 +158,7 @@ public class TabOne extends Fragment
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if(mBluetoothAdapter == null)
         {
-            myLabel.setText("No bluetooth adapter available");
+            errors.setText("No bluetooth adapter available");
         }
 
         if(!mBluetoothAdapter.isEnabled())
@@ -122,7 +179,7 @@ public class TabOne extends Fragment
                 }
             }
         }
-        myLabel.setText("Bluetooth Device Found");
+        errors.setText("Bluetooth Device Found");
     }
 
     void openBT() throws IOException
@@ -135,11 +192,17 @@ public class TabOne extends Fragment
 
         beginListenForData();
 
-        myLabel.setText("Bluetooth Opened");
+        errors.setText("Bluetooth Opened");
     }
 
     final String toFah(String s){
-        double data = Double.parseDouble(s);
+        double data = 0;
+        try {
+            data = Double.parseDouble(s);
+        }
+        catch(Exception e){
+            return (s);
+        }
         if(!isCelsius){
             data = data * 1.8 + 32;
         }
@@ -183,7 +246,7 @@ public class TabOne extends Fragment
                                         {
 
 
-                                            myLabel.setText(data);
+                                            myLabel.setText(toFah(data));
 
 
                                         }
@@ -207,13 +270,7 @@ public class TabOne extends Fragment
         workerThread.start();
     }
 
-    void sendData() throws IOException
-    {
-        String msg = myTextbox.getText().toString();
-        msg += "\n";
-        mmOutputStream.write(msg.getBytes());
-        myLabel.setText("Data Sent");
-    }
+
 
     void closeBT() throws IOException
     {
@@ -221,7 +278,7 @@ public class TabOne extends Fragment
         mmOutputStream.close();
         mmInputStream.close();
         mmSocket.close();
-        myLabel.setText("Bluetooth Closed");
+        errors.setText("Bluetooth Closed");
     }
 
 
