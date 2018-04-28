@@ -35,7 +35,7 @@ public class TabTwo extends Fragment
         return view;
     }
 
-    
+
 
     public boolean addToGraph(int x, int y){
         series.appendData(new DataPoint(x,y),true, maxlength);
