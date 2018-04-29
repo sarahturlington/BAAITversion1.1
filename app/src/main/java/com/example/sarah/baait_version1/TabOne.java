@@ -4,8 +4,12 @@ package com.example.sarah.baait_version1;
         import android.bluetooth.BluetoothAdapter;
         import android.bluetooth.BluetoothDevice;
         import android.bluetooth.BluetoothSocket;
+        import android.content.Context;
         import android.content.DialogInterface;
         import android.content.Intent;
+        import android.media.AudioManager;
+        import android.media.MediaPlayer;
+        import android.media.RingtoneManager;
         import android.os.Bundle;
         import android.os.Handler;
         import android.text.Editable;
@@ -67,6 +71,8 @@ public class TabOne extends Fragment
     TextView threshC; //C or F depending on input type
     Button threshConfirm; //input threshold
     int places = 1;// rounding location
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState){
@@ -81,6 +87,9 @@ public class TabOne extends Fragment
         threshC = (TextView) view.findViewById(R.id.textView10);//C or F depending on input type
         threshinput = (EditText) view.findViewById(R.id.editText2);// takes the threshold input
         threshConfirm = (Button)view.findViewById(R.id.button4);//input threshold
+        AudioManager alarmManager = (AudioManager) getContext().getSystemService(Context.AUDIO_SERVICE);//build alarm objects
+        final MediaPlayer alarm = MediaPlayer.create(getContext(), RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM));
+
         threshConfirm.setOnClickListener(new View.OnClickListener() {//defines the behaviour for taking in the user defined threshold
             @Override
             public void onClick(View view) {
@@ -134,6 +143,7 @@ public class TabOne extends Fragment
                 builder.setMessage("Temperature Exceeded Threshold");
                 builder.setTitle("Check Your Baby!");
                 ignore = true;
+                alarm.start();
                 //cancel button
                 builder.setNegativeButton("Let Him/Her Die", new DialogInterface.OnClickListener() {
 
@@ -142,6 +152,7 @@ public class TabOne extends Fragment
                         dialogInterface.cancel();
                         errors.setText("You are a Terrible Parent");
                         ignore = false;
+                        alarm.stop();
                     }
                 });
                 //ok button
@@ -150,6 +161,7 @@ public class TabOne extends Fragment
                     public void onClick(DialogInterface dialogInterface, int i) {
                        ignore = true;
                        errors.setText("Please Input New Threshold");
+                       alarm.stop();
 
                     }
                 });
