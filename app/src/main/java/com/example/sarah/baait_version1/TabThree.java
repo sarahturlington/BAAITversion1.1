@@ -19,9 +19,10 @@ import android.widget.EditText;
  */
 
 public class TabThree extends Fragment {
-    public Button addpatch;
-    public Button sendCSV;
-    public EditText email;
+    public Button addpatch;//add patch button
+    public Button sendCSV; //send csv button
+    public EditText email; //input for the email
+    //defines all of the behaviour of the UI
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -30,24 +31,24 @@ public class TabThree extends Fragment {
     email = (EditText) view.findViewById(R.id.editText);
     addpatch.setOnClickListener(new View.OnClickListener() {
         @Override
-        public void onClick(View view) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setCancelable(true);
-            builder.setMessage("Patches Available to Add: None");
-            builder.setTitle("Adding Patches");
+        public void onClick(View view) { //creates an alet button on pressing the button
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity()); // gets the activity of the current fragment
+            builder.setCancelable(true);//can click out of
+            builder.setMessage("Patches Available to Add: None");// placeholder text
+            builder.setTitle("Adding Patches");//placeholder text
             builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    dialogInterface.cancel();
+                    dialogInterface.cancel();//cancel on press
                 }
             });
             builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    dialogInterface.cancel();
+                    dialogInterface.cancel();// cancel on press
                 }
             });
-            builder.show();
+            builder.show();//show the alert
         }
 
     });
@@ -56,24 +57,24 @@ public class TabThree extends Fragment {
     sendCSV = (Button) view.findViewById(R.id.button2);
     sendCSV.setOnClickListener(new View.OnClickListener() {
         @Override
-        public void onClick(View view) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setCancelable(true);
-            builder.setMessage("Sending Compiled Data");
-            builder.setTitle("Sending Data to: " + email.getText());
+        public void onClick(View view) {//creates an alert button on the pressin of the button
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());//get the fragment activity
+            builder.setCancelable(true);// can click out of
+            builder.setMessage("Sending Compiled Data");//placeholder text
+            builder.setTitle("Sending Data to: " + email.getText()); // display email to send the data to
             builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    dialogInterface.cancel();
+                    dialogInterface.cancel();//cancel the alert
                 }
             });
             builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    dialogInterface.cancel();
+                    dialogInterface.cancel();//cancel alert
                 }
             });
-            builder.show();
+            builder.show();//display the buttons
         }
     });
     return view;}

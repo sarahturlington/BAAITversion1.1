@@ -42,93 +42,99 @@ public class TabOne extends Fragment
 
 {
 
-    TextView myLabel;
-    EditText myTextbox;
-    BluetoothAdapter mBluetoothAdapter;
-    BluetoothSocket mmSocket;
-    BluetoothDevice mmDevice;
-    OutputStream mmOutputStream;
-    InputStream mmInputStream;
-    Thread workerThread;
+    TextView myLabel; //Label to display the temperature
+    //Controls the bluetooth connection
+    BluetoothAdapter mBluetoothAdapter; //
+    BluetoothSocket mmSocket;//takes the connection
+    BluetoothDevice mmDevice;//contains th device
+    OutputStream mmOutputStream;//to send data
+    InputStream mmInputStream;//to receive data
+    Thread workerThread;//contains the thread to built the data
     byte[] readBuffer;
     int readBufferPosition;
     int counter;
     volatile boolean stopWorker;
-    ToggleButton celsiusButton;
-    boolean isCelsius = true;
-    TextView CvF;
-    double thresh = 38.9;//in// celcius
-    double userthresh = 100;
-    boolean inputCel = true;
-    boolean ignore = false;
-    TextView errors;
-    EditText threshinput;
-    TextView threshC;
-    Button threshConfirm;
-    int places = 1;
+
+
+    ToggleButton celsiusButton; //toggles between celsius and Fahrenheit
+    boolean isCelsius = true; // determines if a conversion occurs or not
+    TextView CvF; //displays C or F for displayed value
+    double thresh = 38.9;//in// celcius threshold for danger for the child
+    double userthresh = 100;//user input threshold
+    boolean ignore = false; //alert accepted
+    TextView errors; //displays random messages as needed
+    EditText threshinput; // takes the threshold input
+    TextView threshC; //C or F depending on input type
+    Button threshConfirm; //input threshold
+    int places = 1;// rounding location
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+        //defines all objects in the UI
         View view = inflater.inflate(R.layout.tab_one, container, false);
-        Button openButton = (Button)view.findViewById(R.id.open);
-        Button closeButton = (Button)view.findViewById(R.id.close);
-        final TextView CvF = (TextView) view.findViewById(R.id.textView2);
-        myLabel = (TextView)view.findViewById(R.id.label);
-        errors = (TextView) view.findViewById(R.id.textView9);
-        threshC = (TextView) view.findViewById(R.id.textView10);
-        threshinput = (EditText) view.findViewById(R.id.editText2);
-        threshConfirm = (Button)view.findViewById(R.id.button4);
-        threshConfirm.setOnClickListener(new View.OnClickListener() {
+        Button openButton = (Button)view.findViewById(R.id.open); //open bluetooth
+        Button closeButton = (Button)view.findViewById(R.id.close); //close bluetooth
+        final TextView CvF = (TextView) view.findViewById(R.id.textView2);//display C of F next to the the data
+        myLabel = (TextView)view.findViewById(R.id.label); //display temp data
+        errors = (TextView) view.findViewById(R.id.textView9);//displays random messages as needed
+        threshC = (TextView) view.findViewById(R.id.textView10);//C or F depending on input type
+        threshinput = (EditText) view.findViewById(R.id.editText2);// takes the threshold input
+        threshConfirm = (Button)view.findViewById(R.id.button4);//input threshold
+        threshConfirm.setOnClickListener(new View.OnClickListener() {//defines the behaviour for taking in the user defined threshold
             @Override
             public void onClick(View view) {
                 double input = 0;
-                try{
+                try{//in case of none number input
                     input = Double.parseDouble(threshinput.getText().toString());
                 }
                 catch(Exception e){
                     errors.setText("Please Input Numbers Only");
                 }
                 if(!isCelsius){
-                    input = (input - 32) * (5.0/9.0);
+                    input = (input - 32) * (5.0/9.0);//conversion if input is in celcius, stored in celcius
                 }
                 if(input < thresh){
                     userthresh = input;
                     errors.setText("Input Accepted");
 
                 }
-                ignore  = false;
+                ignore  = false;//set alarm to occur new that threshold is set
             }
         });
-        myLabel.addTextChangedListener(new TextWatcher() {
+        myLabel.addTextChangedListener(new TextWatcher() {//defines behavior for the object checking the input for exceeding the threshold
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {//defined for clarity
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            double compare;
-            if(userthresh > thresh ){
+            double compare;//value to use to compare against current
+            if(userthresh > thresh ){//check to see if user threshold is lower than hardware threshold,
                 compare = thresh;
             }
             else{
                 compare = userthresh;
             }
+            //uses the lowest of the thresholds
             double current = 0;
+                //try/catch in case of non number in display
                 try{
                 current = Double.parseDouble(charSequence.toString());
             }catch(Exception e){
-                    current = -99;
+                    current = -100000;// if exception set current below threshold
                 }
             if(!isCelsius){
-                current = (current - 32) * (5.0/9.0);
+                current = (current - 32) * (5.0/9.0); //set current to celsius
             }
-            if((current >= compare) && (!ignore)){
+            if((current >= compare) && (!ignore)){//builds alert if threshold reached and the user has acknowledged a previous alert
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setCancelable(true);
+                //MEMES: will change later
                 builder.setMessage("Temperature Exceeded Threshold");
                 builder.setTitle("Check Your Baby!");
                 ignore = true;
+                //cancel button
                 builder.setNegativeButton("Let Him/Her Die", new DialogInterface.OnClickListener() {
 
                     @Override
@@ -138,6 +144,7 @@ public class TabOne extends Fragment
                         ignore = false;
                     }
                 });
+                //ok button
                 builder.setPositiveButton("Im Going!", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -146,23 +153,25 @@ public class TabOne extends Fragment
 
                     }
                 });
-                builder.show();
+                builder.show(); //show to the alert
             }
             }
 
             @Override
-            public void afterTextChanged(Editable editable) {
+            public void afterTextChanged(Editable editable) {//defined for clarity
             }
         });
-        myLabel.setGravity(Gravity.CENTER);
-        ToggleButton celsiusButton = (ToggleButton) view.findViewById(R.id.celsius);
-        celsiusButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
+        myLabel.setGravity(Gravity.CENTER);//set label text to center
+        ToggleButton celsiusButton = (ToggleButton) view.findViewById(R.id.celsius); //define the toggleButton in XML
+        celsiusButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){//define behavior for the togglebutton
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
+                    //set mode to Fahrenheit
                     isCelsius = false;
                     CvF.setText("F");
                     threshC.setText("F");
                 } else {
+                    //set mode to Celcius
                     isCelsius = true;
                     CvF.setText("C");
                     threshC.setText("C");
@@ -218,17 +227,17 @@ public class TabOne extends Fragment
         {
             for(BluetoothDevice device : pairedDevices)
             {
-                if(device.getName().equals("HC-06"))
+                if(device.getName().equals("HC-06"))//name of the device to pair to
                 {
                     mmDevice = device;
                     break;
                 }
             }
         }
-        errors.setText("Bluetooth Device Found");
+        errors.setText("Bluetooth Device Found");// set error text when connected
     }
 
-    void openBT() throws IOException
+    void openBT() throws IOException// opens all of the input and output steams
     {
         UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"); //Standard SerialPortService ID
         mmSocket = mmDevice.createRfcommSocketToServiceRecord(uuid);
@@ -238,30 +247,32 @@ public class TabOne extends Fragment
 
         beginListenForData();
 
-        errors.setText("Bluetooth Opened");
+        errors.setText("Bluetooth Opened");// set text when connection opened
     }
 
-    final String toFah(String s){
+    final String toFah(String s){//converts a string of C or F to the opposite
         double data = 0;
+        //try catch if there isnt a number in the label
         try {
             data = Double.parseDouble(s);
         }
         catch(Exception e){
             return (s);
         }
-        if(!isCelsius){
+        if(!isCelsius){//convert to fahrenhiet, data received in celsius
             data = data * 1.8 + 32;
         }
+        //this is all for rounding to a software determined decimal place  (1)
         BigDecimal bd = new BigDecimal(Double.toString(data));
-        bd = bd.setScale(1, RoundingMode.HALF_UP);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
         return Double.toString(bd.doubleValue());
     }
 
-    void beginListenForData()
+    void beginListenForData()//get data from the bluetooth connection
     {
         final Handler handler = new Handler();
         final byte delimiter = 10; //This is the ASCII code for a newline character
-
+        //threads to handle the UART connection style
         stopWorker = false;
         readBufferPosition = 0;
         readBuffer = new byte[1024];
@@ -273,17 +284,17 @@ public class TabOne extends Fragment
                 {
                     try
                     {
-                        int bytesAvailable = mmInputStream.available();
+                        int bytesAvailable = mmInputStream.available();//try to open the input stream
                         if(bytesAvailable > 0)
                         {
-                            byte[] packetBytes = new byte[bytesAvailable];
+                            byte[] packetBytes = new byte[bytesAvailable];//fill arroay with incoming bytes
                             mmInputStream.read(packetBytes);
                             for(int i=0;i<bytesAvailable;i++)
                             {
                                 byte b = packetBytes[i];
                                 if(b == delimiter)
                                 {
-                                    byte[] encodedBytes = new byte[readBufferPosition];
+                                    byte[] encodedBytes = new byte[readBufferPosition];//convert bytes to ascii -> string
                                     System.arraycopy(readBuffer, 0, encodedBytes, 0, encodedBytes.length);
                                     final String data = (new String(encodedBytes, "US-ASCII"));
                                     readBufferPosition = 0;
@@ -294,7 +305,7 @@ public class TabOne extends Fragment
                                         {
 
 
-                                            myLabel.setText(toFah(data));
+                                            myLabel.setText(toFah(data));// set the text of the label with conversion if necessary
 
 
                                         }
@@ -302,7 +313,7 @@ public class TabOne extends Fragment
                                 }
                                 else
                                 {
-                                    readBuffer[readBufferPosition++] = b;
+                                    readBuffer[readBufferPosition++] = b; // add data to buffer if not a complete byte
                                 }
                             }
                         }
@@ -320,15 +331,16 @@ public class TabOne extends Fragment
 
 
 
-    void closeBT() throws IOException
+    void closeBT() throws IOException//cancel bluetooth connection
     {
-        stopWorker = true;
+        stopWorker = true;//stop working
+        //closes all of the input and output streams
         mmOutputStream.close();
         mmInputStream.close();
         mmSocket.close();
-        errors.setText("Bluetooth Closed");
+        errors.setText("Bluetooth Closed");//set the text when closed
         myLabel.setText("---");
-        //CvF.setText("---");
+
     }
 
 
