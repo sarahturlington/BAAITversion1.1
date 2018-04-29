@@ -19,6 +19,7 @@ public class TabTwo extends Fragment implements graphControl
 
 
 {
+    public GraphView graph;
     public LineGraphSeries<DataPoint> series = null;
     int maxlength = 30;
     long x_value = 0;
@@ -27,7 +28,7 @@ public class TabTwo extends Fragment implements graphControl
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.tab_two, container, false);
-        GraphView graph = (GraphView) view.findViewById(R.id.graph);
+        graph = (GraphView) view.findViewById(R.id.graph);
         series = new LineGraphSeries<DataPoint>();
         series.appendData(new DataPoint(0, 98.6),true,maxlength);
         series.appendData(new DataPoint(1,98.1), true, maxlength);
@@ -46,6 +47,7 @@ public class TabTwo extends Fragment implements graphControl
 
         series.appendData(new DataPoint(x_value,data),true, maxlength);
         x_value++;
+        graph.addSeries(series);
     }
 
 
