@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements TabOne.SendMessag
     }
     @Override
     public void SendData(String s){
-        TabTwo f = (TabTwo) getSupportFragmentManager().findFragmentById(R.id.tabItem2);
+        TabTwo f = (TabTwo) mViewPager.getAdapter().instantiateItem(mViewPager, mViewPager.getCurrentItem());
         f.displayData(s);
     }
 
