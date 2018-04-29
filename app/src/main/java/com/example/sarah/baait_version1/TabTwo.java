@@ -30,8 +30,7 @@ public class TabTwo extends Fragment implements graphControl
         View view = inflater.inflate(R.layout.tab_two, container, false);
         graph = (GraphView) view.findViewById(R.id.graph);
         series = new LineGraphSeries<DataPoint>();
-        series.appendData(new DataPoint(0, 98.6),true,maxlength);
-        series.appendData(new DataPoint(1,98.1), true, maxlength);
+
         graph.addSeries(series);
         return view;
     }

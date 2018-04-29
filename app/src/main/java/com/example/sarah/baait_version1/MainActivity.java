@@ -1,5 +1,6 @@
 package com.example.sarah.baait_version1;
 import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -63,6 +64,8 @@ public class MainActivity extends AppCompatActivity implements graphControl {
     int readBufferPosition;
     int counter;
     volatile boolean stopWorker;
+    android.support.v4.app.FragmentManager fragmentManager;
+    android.support.v4.app.FragmentTransaction fragmentTransaction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +86,9 @@ public class MainActivity extends AppCompatActivity implements graphControl {
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
+
+
+
 
 
 

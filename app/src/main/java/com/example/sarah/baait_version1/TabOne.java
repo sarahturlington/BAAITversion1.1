@@ -251,11 +251,15 @@ public class TabOne extends Fragment implements graphControl
                 if(device.getName().equals("HC-06"))//name of the device to pair to
                 {
                     mmDevice = device;
+                    errors.setText("Bluetooth Device Found");// set error text when connected
                     break;
                 }
             }
         }
-        errors.setText("Bluetooth Device Found");// set error text when connected
+        else{
+            errors.setText("Bluetooth Device Not Found");
+        }
+
     }
 
     void openBT() throws IOException// opens all of the input and output steams
