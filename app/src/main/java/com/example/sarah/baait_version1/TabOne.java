@@ -48,6 +48,7 @@ public class TabOne extends Fragment
 
     TextView myLabel; //Label to display the temperature
     //Controls the bluetooth connection
+    EditText myTextbox;
     BluetoothAdapter mBluetoothAdapter; //
     BluetoothSocket mmSocket;//takes the connection
     BluetoothDevice mmDevice;//contains th device
@@ -87,8 +88,8 @@ public class TabOne extends Fragment
         threshC = (TextView) view.findViewById(R.id.textView10);//C or F depending on input type
         threshinput = (EditText) view.findViewById(R.id.editText2);// takes the threshold input
         threshConfirm = (Button)view.findViewById(R.id.button4);//input threshold
-        AudioManager alarmManager = (AudioManager) getContext().getSystemService(Context.AUDIO_SERVICE);//build alarm objects
-        final MediaPlayer alarm = MediaPlayer.create(getContext(), RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM));
+        //AudioManager alarmManager = (AudioManager) getContext().getSystemService(Context.AUDIO_SERVICE);//build alarm objects
+        //final MediaPlayer alarm = MediaPlayer.create(getContext(), RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM));
 
         threshConfirm.setOnClickListener(new View.OnClickListener() {//defines the behaviour for taking in the user defined threshold
             @Override
@@ -143,7 +144,7 @@ public class TabOne extends Fragment
                 builder.setMessage("Temperature Exceeded Threshold");
                 builder.setTitle("Check Your Baby!");
                 ignore = true;
-                alarm.start();
+               // alarm.start();
                 //cancel button
                 builder.setNegativeButton("Let Him/Her Die", new DialogInterface.OnClickListener() {
 
@@ -152,7 +153,7 @@ public class TabOne extends Fragment
                         dialogInterface.cancel();
                         errors.setText("You are a Terrible Parent");
                         ignore = false;
-                        alarm.stop();
+                       // alarm.stop();
                     }
                 });
                 //ok button
@@ -161,7 +162,7 @@ public class TabOne extends Fragment
                     public void onClick(DialogInterface dialogInterface, int i) {
                        ignore = true;
                        errors.setText("Please Input New Threshold");
-                       alarm.stop();
+                       //alarm.stop();
 
                     }
                 });
