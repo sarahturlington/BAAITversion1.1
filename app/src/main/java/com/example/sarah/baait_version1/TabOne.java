@@ -273,8 +273,13 @@ public class TabOne extends Fragment implements graphControl
 
     @Override
     public void addToGraph(String s){
-        Activity a = getActivity().getParent();
-        ((graphControl) a).addToGraph(s);
+        try {
+            Activity a = getActivity().getParent();
+            ((graphControl) a).addToGraph(s);
+        }
+        catch(NullPointerException e){
+
+        }
     }
 
     final String toFah(String s){//converts a string of C or F to the opposite
@@ -333,7 +338,7 @@ public class TabOne extends Fragment implements graphControl
 
 
                                             myLabel.setText(toFah(data));// set the text of the label with conversion if necessary
-                                            addToGraph(data);
+
 
                                         }
                                     });

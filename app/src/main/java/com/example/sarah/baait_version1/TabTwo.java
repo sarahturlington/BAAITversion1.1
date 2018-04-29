@@ -48,11 +48,7 @@ public class TabTwo extends Fragment implements graphControl
         x_value++;
     }
 
-    public boolean addToGraph(int y){
-        series.appendData(new DataPoint(x_value,y),true, maxlength);
-        x_value++;
-        return true;
-    }
+
 
 
 }
