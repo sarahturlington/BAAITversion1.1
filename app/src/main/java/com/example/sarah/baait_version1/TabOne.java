@@ -19,6 +19,8 @@ package com.example.sarah.baait_version1;
         import java.io.IOException;
         import java.io.InputStream;
         import java.io.OutputStream;
+        import java.math.BigDecimal;
+        import java.math.RoundingMode;
         import java.util.Set;
         import java.util.UUID;
         import android.os.Bundle;
@@ -55,9 +57,15 @@ public class TabOne extends Fragment
     ToggleButton celsiusButton;
     boolean isCelsius = true;
     TextView CvF;
-    double thresh = 30;//in// celcius
+    double thresh = 38.9;//in// celcius
+    double userthresh = 100;
+    boolean inputCel = true;
     boolean ignore = false;
     TextView errors;
+    EditText threshinput;
+    TextView threshC;
+    Button threshConfirm;
+    int places = 1;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState){
@@ -68,6 +76,30 @@ public class TabOne extends Fragment
         final TextView CvF = (TextView) view.findViewById(R.id.textView2);
         myLabel = (TextView)view.findViewById(R.id.label);
         errors = (TextView) view.findViewById(R.id.textView9);
+        threshC = (TextView) view.findViewById(R.id.textView10);
+        threshinput = (EditText) view.findViewById(R.id.editText2);
+        threshConfirm = (Button)view.findViewById(R.id.button4);
+        threshConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                double input = 0;
+                try{
+                    input = Double.parseDouble(threshinput.getText().toString());
+                }
+                catch(Exception e){
+                    errors.setText("Please Input Numbers Only");
+                }
+                if(!isCelsius){
+                    input = (input - 32) * (5.0/9.0);
+                }
+                if(input < thresh){
+                    userthresh = input;
+                    errors.setText("Input Accepted");
+
+                }
+                ignore  = false;
+            }
+        });
         myLabel.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -75,16 +107,26 @@ public class TabOne extends Fragment
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            double compare;
+            if(userthresh > thresh ){
+                compare = thresh;
+            }
+            else{
+                compare = userthresh;
+            }
             double current = 0;
                 try{
                 current = Double.parseDouble(charSequence.toString());
             }catch(Exception e){
                     current = -99;
                 }
-            if((current >= thresh) && (!ignore)){
+            if(!isCelsius){
+                current = (current - 32) * (5.0/9.0);
+            }
+            if((current >= compare) && (!ignore)){
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setCancelable(true);
-                builder.setMessage("Temperature Exceeded: " + Double.toString(thresh));
+                builder.setMessage("Temperature Exceeded Threshold");
                 builder.setTitle("Check Your Baby!");
                 ignore = true;
                 builder.setNegativeButton("Let Him/Her Die", new DialogInterface.OnClickListener() {
@@ -92,6 +134,7 @@ public class TabOne extends Fragment
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.cancel();
+                        errors.setText("You are a Terrible Parent");
                         ignore = false;
                     }
                 });
@@ -99,6 +142,7 @@ public class TabOne extends Fragment
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                        ignore = true;
+                       errors.setText("Please Input New Threshold");
 
                     }
                 });
@@ -117,9 +161,11 @@ public class TabOne extends Fragment
                 if (isChecked) {
                     isCelsius = false;
                     CvF.setText("F");
+                    threshC.setText("F");
                 } else {
                     isCelsius = true;
                     CvF.setText("C");
+                    threshC.setText("C");
                 }
             }
         });
@@ -206,7 +252,9 @@ public class TabOne extends Fragment
         if(!isCelsius){
             data = data * 1.8 + 32;
         }
-        return Double.toString(data);
+        BigDecimal bd = new BigDecimal(Double.toString(data));
+        bd = bd.setScale(1, RoundingMode.HALF_UP);
+        return Double.toString(bd.doubleValue());
     }
 
     void beginListenForData()
@@ -279,6 +327,8 @@ public class TabOne extends Fragment
         mmInputStream.close();
         mmSocket.close();
         errors.setText("Bluetooth Closed");
+        myLabel.setText("---");
+        //CvF.setText("---");
     }
 
 

@@ -4,4 +4,11 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#3F51B5</color>
     <color name="white">#FFFFFF</color>
+    <color name="darkpurple">#581845</color>
+    <color name="purple">#900C3F</color>
+    <color name="pink">#C70039</color>
+    <color name="orange">#FF5733</color>
+    <color name="yellow">#FFC300</color>
+    <color name="green">#DAF7A6</color>
+
 </resources>
