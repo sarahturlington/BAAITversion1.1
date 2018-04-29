@@ -333,7 +333,7 @@ public class TabOne extends Fragment implements graphControl
 
 
                                             myLabel.setText(toFah(data));// set the text of the label with conversion if necessary
-
+                                            addToGraph(data);
 
                                         }
                                     });
