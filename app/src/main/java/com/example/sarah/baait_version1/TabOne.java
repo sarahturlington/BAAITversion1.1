@@ -42,7 +42,7 @@ package com.example.sarah.baait_version1;
  * Created by sarah on 4/3/2018.
  */
 
-public class TabOne extends Fragment
+public class TabOne extends Fragment implements graphControl
 
 {
 
@@ -269,6 +269,12 @@ public class TabOne extends Fragment
         beginListenForData();
 
         errors.setText("Bluetooth Opened");// set text when connection opened
+    }
+
+    @Override
+    public void addToGraph(String s){
+        Activity a = getActivity().getParent();
+        ((graphControl) a).addToGraph(s);
     }
 
     final String toFah(String s){//converts a string of C or F to the opposite

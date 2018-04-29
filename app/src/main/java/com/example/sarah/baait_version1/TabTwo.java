@@ -15,7 +15,7 @@ import com.jjoe64.graphview.series.LineGraphSeries;
  * Created by sarah on 4/3/2018.
  */
 
-public class TabTwo extends Fragment
+public class TabTwo extends Fragment implements graphControl
 
 
 {
@@ -34,8 +34,19 @@ public class TabTwo extends Fragment
         graph.addSeries(series);
         return view;
     }
+    @Override
+    public void addToGraph(String s){
+        double data = 0;
+        try{
+            data = Double.parseDouble(s);
+        }
+        catch(Exception e){
+            return;
+        }
 
-
+        series.appendData(new DataPoint(x_value,data),true, maxlength);
+        x_value++;
+    }
 
     public boolean addToGraph(int y){
         series.appendData(new DataPoint(x_value,y),true, maxlength);

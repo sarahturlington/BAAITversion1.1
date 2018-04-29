@@ -36,7 +36,7 @@ import android.widget.TextView;
 
 import com.jjoe64.graphview.series.LineGraphSeries;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements graphControl {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        
+
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
@@ -186,8 +186,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
 }
-
-
-
+@Override
+    public void addToGraph(String s){
+        Fragment fragment3 = getSupportFragmentManager().findFragmentById(R.id.tabItem3);
+        ((graphControl) fragment3).addToGraph(s);
+}
 
 }
+
