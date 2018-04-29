@@ -88,8 +88,7 @@ public class TabOne extends Fragment
         threshC = (TextView) view.findViewById(R.id.textView10);//C or F depending on input type
         threshinput = (EditText) view.findViewById(R.id.editText2);// takes the threshold input
         threshConfirm = (Button)view.findViewById(R.id.button4);//input threshold
-        //AudioManager alarmManager = (AudioManager) getContext().getSystemService(Context.AUDIO_SERVICE);//build alarm objects
-        //final MediaPlayer alarm = MediaPlayer.create(getContext(), RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM));
+
 
         threshConfirm.setOnClickListener(new View.OnClickListener() {//defines the behaviour for taking in the user defined threshold
             @Override
@@ -106,7 +105,14 @@ public class TabOne extends Fragment
                 }
                 if(input < thresh){
                     userthresh = input;
-                    errors.setText("Input Accepted");
+                    String temp = "Current Threshold is " + toFah(Double.toString(userthresh)) ;
+                    if(isCelsius){
+                        temp += "C";
+                    }
+                    else{
+                        temp += "F";
+                    }
+                    errors.setText(temp);
 
                 }
                 ignore  = false;//set alarm to occur new that threshold is set
@@ -139,21 +145,23 @@ public class TabOne extends Fragment
             }
             if((current >= compare) && (!ignore)){//builds alert if threshold reached and the user has acknowledged a previous alert
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setCancelable(true);
+                //builder.setCancelable(true);
                 //MEMES: will change later
                 builder.setMessage("Temperature Exceeded Threshold");
                 builder.setTitle("Check Your Baby!");
+                AudioManager alarmManager = (AudioManager) getContext().getSystemService(Context.AUDIO_SERVICE);//build alarm objects
+                final MediaPlayer alarm = MediaPlayer.create(getContext(), RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM));
                 ignore = true;
-               // alarm.start();
+               alarm.start();
                 //cancel button
-                builder.setNegativeButton("Let Him/Her Die", new DialogInterface.OnClickListener() {
+                builder.setNegativeButton("Ignore", new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.cancel();
-                        errors.setText("You are a Terrible Parent");
+                        //errors.setText("Threshold maintained");
                         ignore = false;
-                       // alarm.stop();
+                       alarm.stop();
                     }
                 });
                 //ok button
@@ -162,7 +170,7 @@ public class TabOne extends Fragment
                     public void onClick(DialogInterface dialogInterface, int i) {
                        ignore = true;
                        errors.setText("Please Input New Threshold");
-                       //alarm.stop();
+                       alarm.stop();
 
                     }
                 });
@@ -354,9 +362,9 @@ public class TabOne extends Fragment
         errors.setText("Bluetooth Closed");//set the text when closed
         myLabel.setText("---");
 
-    }
+                }
 
 
 
-}
+                }
 
