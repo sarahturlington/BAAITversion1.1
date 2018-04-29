@@ -37,7 +37,7 @@ import android.widget.TextView;
 
 import com.jjoe64.graphview.series.LineGraphSeries;
 
-public class MainActivity extends AppCompatActivity implements graphControl {
+public class MainActivity extends AppCompatActivity implements TabOne.SendMessage {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -87,15 +87,12 @@ public class MainActivity extends AppCompatActivity implements graphControl {
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
-
-
-
-
-
-
-
     }
-
+    @Override
+    public void SendData(String s){
+        TabTwo f = (TabTwo) getSupportFragmentManager().findFragmentById(R.id.tabItem2);
+        f.displayData(s);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -192,11 +189,7 @@ public class MainActivity extends AppCompatActivity implements graphControl {
         }
 
 }
-@Override
-    public void addToGraph(String s){
-        Fragment fragment3 = getSupportFragmentManager().findFragmentById(R.id.tabItem3);
-        ((graphControl) fragment3).addToGraph(s);
-}
+
 
 }
 

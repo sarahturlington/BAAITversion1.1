@@ -72,7 +72,7 @@ public class TabOne extends Fragment implements graphControl
     TextView threshC; //C or F depending on input type
     Button threshConfirm; //input threshold
     int places = 1;// rounding location
-
+    SendMessage SM;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -342,7 +342,12 @@ public class TabOne extends Fragment implements graphControl
 
 
                                             myLabel.setText(toFah(data));// set the text of the label with conversion if necessary
+                                            try{
+                                               SM = (SendMessage) getActivity();
+                                            }
+                                            catch(ClassCastException e){
 
+                                        }
 
                                         }
                                     });
@@ -379,7 +384,9 @@ public class TabOne extends Fragment implements graphControl
 
                 }
 
-
+public interface SendMessage{
+        void SendData(String message);
+}
 
                 }
 
