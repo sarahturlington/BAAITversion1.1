@@ -18,15 +18,13 @@ import org.w3c.dom.Text;
  * Created by sarah on 4/3/2018.
  */
 
-public class TabTwo extends Fragment implements graphControl
-
-
-{
+public class TabTwo extends Fragment {
     public GraphView graph;
     public LineGraphSeries<DataPoint> series = null;
     int maxlength = 30;
-    long x_value = 0;
-    TextView testing;
+    double x_value = 0;
+    public boolean isCelcius;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -34,29 +32,38 @@ public class TabTwo extends Fragment implements graphControl
         View view = inflater.inflate(R.layout.tab_two, container, false);
         graph = (GraphView) view.findViewById(R.id.graph);
         series = new LineGraphSeries<DataPoint>();
-        testing = (TextView) view.findViewById(R.id.testing);
         graph.addSeries(series);
+        graph.setTitle("Temperature");
+        graph.getViewport().setScrollable(true);
+        graph.getViewport().setYAxisBoundsManual(true);
+        graph.getViewport().setMinY(70);
+        graph.getViewport().setMaxY(120);
+        graph.getViewport().setMinX(0);
+        graph.getViewport().setMaxX(50);
+
+
         return view;
     }
-    @Override
-    public void addToGraph(String s){
-        double data = 0;
-        try{
-            data = Double.parseDouble(s);
-        }
-        catch(Exception e){
-            return;
-        }
 
-        series.appendData(new DataPoint(x_value,data),true, maxlength);
-        x_value++;
-        graph.addSeries(series);
-    }
 
     protected void displayData(String message){
-        testing.setText(message);
+        //testing.setText(message);
+        double data = 0;
+        try{
+            data = Double.parseDouble(message);
+        }
+        catch (Exception e){
+           return;
+        }
+        series.appendData(new DataPoint(x_value, data), true, 500 );
+        x_value++;
+        return;
     }
 
+    public void changeFormat(Boolean isCelsius){
+
+
+    }
 
 
 }

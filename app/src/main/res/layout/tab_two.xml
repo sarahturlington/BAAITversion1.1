@@ -3,17 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id = "@+id/testing"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="TESTING"
-        android:textSize="20sp"/>
-
     <com.jjoe64.graphview.GraphView
         android:id="@+id/graph"
-        android:layout_width="224dp"
-        android:layout_height="297dp" />
+        android:layout_width="match_parent"
+        android:layout_height="406dp" />
 
 </LinearLayout>
