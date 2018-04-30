@@ -49,8 +49,8 @@ public class TabTwo extends Fragment {
         graph.setTitle("Temperature");
         graph.getViewport().setScrollable(true);
         graph.getViewport().setYAxisBoundsManual(true);
-        graph.getViewport().setMinY(70);
-        graph.getViewport().setMaxY(120);
+        graph.getViewport().setMinY(0);
+        graph.getViewport().setMaxY(50);
         graph.getViewport().setMinX(0);
         graph.getViewport().setMaxX(50);
         series.setOnDataPointTapListener(new OnDataPointTapListener() {
