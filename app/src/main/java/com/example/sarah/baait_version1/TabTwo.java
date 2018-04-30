@@ -3,16 +3,26 @@ package com.example.sarah.baait_version1;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.format.Time;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.DataPointInterface;
 import com.jjoe64.graphview.series.LineGraphSeries;
+import com.jjoe64.graphview.series.OnDataPointTapListener;
+import com.jjoe64.graphview.series.Series;
+
 
 import org.w3c.dom.Text;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 /**
  * Created by sarah on 4/3/2018.
@@ -22,8 +32,10 @@ public class TabTwo extends Fragment {
     public GraphView graph;
     public LineGraphSeries<DataPoint> series = null;
     int maxlength = 30;
-    double x_value = 0;
+    int x_value = 0;
     public boolean isCelcius;
+    ArrayList<DataPoint> datapoint = new ArrayList<DataPoint>();
+    ArrayList<String> times = new ArrayList<String>();
 
     @Nullable
     @Override
@@ -40,8 +52,12 @@ public class TabTwo extends Fragment {
         graph.getViewport().setMaxY(120);
         graph.getViewport().setMinX(0);
         graph.getViewport().setMaxX(50);
-
-
+        series.setOnDataPointTapListener(new OnDataPointTapListener() {
+            @Override
+            public void onTap(Series series, DataPointInterface dataPointInterface) {
+                Toast.makeText(getActivity(), "Temperature: " + Double.toString(dataPointInterface.getY()) + "@ " + times.get((int)dataPointInterface.getX()).toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
         return view;
     }
 
@@ -55,8 +71,13 @@ public class TabTwo extends Fragment {
         catch (Exception e){
            return;
         }
-        series.appendData(new DataPoint(x_value, data), true, 500 );
+        DataPoint mdataPoint = new DataPoint(x_value, data);
+        series.appendData(mdataPoint, true, 500 );
+        datapoint.add(mdataPoint);
         x_value++;
+        Time now = new Time();
+        now.setToNow();
+        times.add(x_value, now.toString());
         return;
     }
 
