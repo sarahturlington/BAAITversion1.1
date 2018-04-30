@@ -74,6 +74,7 @@ public class TabTwo extends Fragment {
         }
         DataPoint mdataPoint = new DataPoint(x_value, data);
         series.appendData(mdataPoint, true, 500 );//add to the graph
+        graph.refreshDrawableState();
         datapoint.add(mdataPoint);
        //add current time as a string to the times array for use in toast messages
         Time now = new Time();//
